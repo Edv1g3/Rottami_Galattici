@@ -1,0 +1,123 @@
+/* You can add global styles to this file, and also import other style files */
+body{
+  background-color: #131313 ;
+  margin: 0;
+  padding: 0;
+}
+
+.testo-normale {
+  font-family: "Chakra Petch", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  color: #b8b8b8;
+  margin: 0;
+  padding: 2px;
+  padding-right: 20px;
+}
+
+.titolo-principale {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 700;
+  font-style: normal;
+  color: #b8b8b8;
+  margin: 0;
+  padding: 2px;
+  letter-spacing: 2px;
+  font-size: 20px;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #131313;
+  padding: 10px;
+}
+
+img {
+  height: 100px;
+  width: auto;
+  background-color: #b8b8b8;
+  display: block;
+}
+
+.container {
+  width:auto;
+  margin-top: 40px;
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-bottom: 20px;
+  padding: 20px;
+  border-left: 2px solid #FFE81F; 
+  float: left;
+  padding-right: 150px;
+}
+
+.titolo {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 900;
+  font-style: normal;
+  color: #FFE81F;
+}
+
+.btn {
+  font-family: "Orbitron", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 600;
+  font-style: normal;
+  background-color: #FFE81F;
+  clip-path: polygon(10% 0%, 90% 0%, 100% 50%, 90% 100%, 10% 100%, 0% 50%);
+  padding: 5px 20px;
+  border: none;
+  cursor: pointer;
+  gap: 20px;
+  position: relative; /* Necessario per posizionare i pseudo-elementi */
+  margin: 10px;
+}
+
+.btn::before,
+.btn::after {
+  content: ""; /* Necessario per mostrare il pseudo-elemento */
+  display: inline-block;
+  width: 6px;   /* Larghezza del puntino */
+  height: 6px;  /* Altezza del puntino */
+  background-color: #322e2e; /* Colore del puntino */
+  border-radius: 50%;        /* Rende il quadratino un cerchio perfetto */
+}
+.btn::before {
+  position: absolute;
+  top: 50%;
+  left: 5px; 
+  transform: translateY(-50%);
+}
+.btn::after {
+  position: absolute;
+  top: 50%;
+  right: 5px; 
+  transform: translateY(-50%);
+}
+.btn:hover {
+  background-color: #edc218;
+  color: #131313;
+  cursor: pointer;
+}
+
+.btn-aggiungi {
+  margin:10px 10px 30px 10px;
+}
+
+.btn-elimina {
+  background-color: #C49A6C;
+}
+
+.titoletti {
+  font-family: "Chakra Petch", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 500;
+  font-style: normal;
+  color:#C49A6C;
+  padding: 5px;
+}

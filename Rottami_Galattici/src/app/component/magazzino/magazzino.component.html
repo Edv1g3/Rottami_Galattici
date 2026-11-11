@@ -1,0 +1,43 @@
+<div class="container">
+    <h1 class="titolo">Magazzino</h1>
+    <table>
+        <thead>
+            <tr>
+                <th class="titoletti" scope="col"> </th>
+                <th class="titoletti" scope="col">ID</th>
+                <th class="titoletti" scope="col">Nome</th>
+                <th class="titoletti" scope="col">Giacenza</th>
+                <th class="titoletti" scope="col">Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (pezzo of pezzi; track pezzo.codice) {
+                <tr>
+                    <td class="testo-normale">{{ pezzo.richiesta ? '!' : ' ' }}</td>
+                    <td class="testo-normale">{{ pezzo.codice }}</td>
+                    <td class="testo-normale">{{ pezzo.descrizione }}</td>
+                    <td class="testo-normale">{{ pezzo.quantitaGiacenza }}</td>
+                    <td>
+                        <button class="btn btn-modifica" (click)="selezionaPezzo(pezzo)">Dettagli ></button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<div class="container">
+    <h1 class="testo-normale">Dettaglio pezzo</h1>
+    @if (pezzoSelezionato) {
+        <div class="dettaglio-pezzo">
+            <p class="testo-normale">Codice: {{ pezzoSelezionato.codice }}</p>
+            <p class="testo-normale">Nome: {{ pezzoSelezionato.descrizione }}</p>
+            <p class="testo-normale">Giacenza: {{ pezzoSelezionato.quantitaGiacenza }}</p>
+            <p class="testo-normale">Prezzo Unitario: {{ pezzoSelezionato.prezzoUnitario }}</p>
+            <p class="testo-normale">Richiesta: {{ pezzoSelezionato.richiesta ? 'Sì' : 'No' }}</p>
+
+            <input type="number" [(ngModel)]="quantitaDaOrdinare" placeholder="Quantità da ordinare" class="input-quantita">
+            <button class="btn btn-ordina" (click)="ordinaPezzo(pezzoSelezionato,quantitaDaOrdinare)">Ordina</button>
+        </div>
+    }
+</div>

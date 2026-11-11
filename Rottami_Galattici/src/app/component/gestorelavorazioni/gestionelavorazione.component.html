@@ -1,0 +1,212 @@
+<div class="container elenco-lavorazioni">
+
+  <h1 class="titolo">LAVORAZIONI IN CORSO...</h1>
+
+  <button class="btn btn-aggiungi" (click)="setAggiungi()">Aggiungi Lavorazione</button>
+
+  <table>
+    <thead>
+      <tr>
+        <th class="titoletti" scope="col">ID</th>
+        <th class="titoletti" scope="col">Stato</th>
+        <th class="titoletti" scope="col">Priorità</th>
+        <th class="titoletti" scope="col">Azioni</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (lavorazione of lavorazioni; track lavorazione.id) {
+        <tr>
+          <td class="testo-normale">{{ lavorazione.id }}</td>
+          <td class="testo-normale">{{ lavorazione.stato }}</td>
+          <td class="testo-normale"> <span class="pallino" [ngClass]="lavorazione.priorita"></span> </td>
+          <td>
+            <button class="btn btn-modifica" (click)="setModifica(lavorazione.id)">Modifica</button>
+            <button class="btn btn-elimina" (click)="eliminaLavorazione(lavorazione.id)">Elimina</button>
+          </td>
+        </tr>
+      }
+    </tbody>
+  </table>
+</div>
+
+<div class="container dettagli">
+  @if (!aggiungi && !modifica){
+    <p class="testo-normale">Seleziona una lavorazione per visualizzarne i dettagli.</p>
+    <input type="text" class="form-control" placeholder="Cerca per ID " [(ngModel)]="filtro" (ngModelChange)="filtraLavorazioni($event)">
+
+    @if (caricamento) {
+      <p class="testo-normale">Caricamento in corso...</p>
+    } @else if (risultati.length > 0) {
+      <ul>
+        @for (risultato of risultati; track risultato) {
+          <button class="testo-normale" (click)="setModifica(risultato)">{{ risultato }}</button>
+        }
+      </ul>
+    } @else if (filtro) {
+      <p class="testo-normale">Nessun risultato trovato.</p>
+    }
+  }
+
+  @if (aggiungi){
+      <form #formAggiungi="ngForm" (ngSubmit)="aggiungiLavorazione()">
+        <p class="titoletti">Aggiungi dati della navicella per una nuova lavorazione</p>
+        <div class="form-group">
+          <label class="testo-normale" for="matricola">Matricola:</label>
+          <input class="form-control" type="text" id="matricola" [(ngModel)]="Navicellavuota.matricola" name="matricola">
+        </div>
+
+        <div class="form-group">
+          <label class="testo-normale" for="modello">Modello:</label>
+          <input class="form-control" type="text" id="modello" [(ngModel)]="Navicellavuota.modello" name="modello">
+        </div>
+
+        <div class="form-group">
+          <label class="testo-normale" for="nomeNave">Nome Nave:</label>
+          <input class="form-control" type="text" id="nomeNave" [(ngModel)]="Navicellavuota.nomeNave" name="nomeNave">
+        </div>
+
+        <div class="form-group">
+          <label class="testo-normale" for="Classe">Classe:</label>
+          <select class="form-control" id="Classe" [(ngModel)]="Navicellavuota.classe" name="classe">
+            <option value="Navi da guerra">Navi da guerra</option>
+            <option value="Navi da viaggio">Navi da viaggio</option>
+            <option value="Veicoli bassa quota">Veicoli bassa quota</option>
+            <option value="Veicoli marini">Veicoli marini</option>
+            <option value="" default>Altro</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label class="testo-normale" for="pilota">Pilota:</label>
+          <input class="form-control" type="text" id="pilota" [(ngModel)]="Navicellavuota.pilota" name="pilota">
+        </div>
+
+          <button class="btn btn-aggiungi" type="submit">Salva</button>
+      </form>
+  }
+
+  @if (modifica){
+        <tr>
+          <td colspan="3">
+            <p class="testo-normale">Modifica Lavorazione ID: {{ lavorazioneDettaglio.id }}</p>
+            <form class="doppio-campo" #formModifica="ngForm" (ngSubmit)="modificaLavorazione(lavorazioneDettaglio.id)">
+
+              <div class="navicella">
+                <p class="testo-normale">Dati riguardanti la Navicella</p>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="matricola">Matricola:</label>
+                  <input class="form-control" type="text" id="matricola" [(ngModel)]="lavorazioneDettaglio.navicella.matricola" name="matricola">
+                </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="modello">Modello:</label>
+                  <input class="form-control" type="text" id="modello" [(ngModel)]="lavorazioneDettaglio.navicella.modello" name="modello">
+                </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="nomeNave">Nome Nave:</label>
+                  <input class="form-control" type="text" id="nomeNave" [(ngModel)]="lavorazioneDettaglio.navicella.nomeNave" name="nomeNave">
+                </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="Classe">Classe:</label>
+                  <select class="form-control" id="Classe" [(ngModel)]="lavorazioneDettaglio.navicella.classe" name="classe">
+                    <option value="Navi da guerra">Navi da guerra</option>
+                    <option value="Navi da viaggio">Navi da viaggio</option>
+                    <option value="Veicoli bassa quota">Veicoli bassa quota</option>
+                    <option value="Veicoli marini">Veicoli marini</option>
+                    <option value="" default>Altro</option>
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="pilota">Pilota:</label>
+                  <input class="form-control" type="text" id="pilota" [(ngModel)]="lavorazioneDettaglio.navicella.pilota" name="pilota">
+                </div>
+
+              </div>
+
+              <div class="form-group">
+                <label class="testo-normale" for="stato">Stato:</label>
+                <select class="form-control" id="Stato" [(ngModel)]="lavorazioneDettaglio.stato" name="stato">
+                  <option value="IN_DEFINIZIONE">In definizione</option>
+                  <option value="PERIZIA">Perizia</option>
+                  <option value="IN_ATTESA">In attesa</option>
+                  <option value="IN_RIPARAZIONE">In riparazione</option>
+                  <option value="PRONTO">Pronto</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="testo-normale" for="priorita">Priorità:</label>
+                <select class="form-control" id="Priorita" [(ngModel)]="lavorazioneDettaglio.priorita" name="priorita">
+                  <option value="ROUTINE">Routine</option>
+                  <option value="URGENTE">Urgente</option>
+                  <option value="CODICE_ROSSO">Codice Rosso</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="testo-normale" for="DataAttracco">Data Attracco:</label>
+                <p class="testo-normale">{{ lavorazioneDettaglio.dataAttracco | date:'dd/MM/yyyy HH:mm' }}</p>
+              </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="tecnicoId">Nome Tecnico:</label>
+                  <select class="form-control" id="tecnicoId" [(ngModel)]="lavorazioneDettaglio.tecnicoId" name="tecnicoId">
+                    @for (tecnico of tecnici; track tecnico) {
+                      <option value="{{ tecnico }}">{{ tecnico }}</option>
+                    }
+                  </select>
+                </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="inizioLavoro">Inizio Lavoro:</label>
+                  @if (lavorazioneDettaglio.inizioLavoro) {
+                    <p class="testo-normale">{{ lavorazioneDettaglio.inizioLavoro | date:'dd/MM/yyyy HH:mm' }}</p>
+                  } @else {
+                    <p class="testo-normale">Non ancora iniziato</p>
+                  }
+                </div>
+
+                <div> 
+                  <label class="testo-normale" for="tipoRiparazione">Tipo Riparazione:</label>
+                  @if (lavorazioneDettaglio.tipoRiparazione) {
+                    <p class="testo-normale">{{ lavorazioneDettaglio.tipoRiparazione }}</p>
+                  } @else {
+                    <p class="testo-normale">Non ancora definito</p>
+                  }
+                </div>
+
+                <div class="form-group testo-lungo">
+                  <label class="testo-normale" for="note">Note:</label>
+                  <textarea class="form-control "  [(ngModel)]="lavorazioneDettaglio.note" id="note" name="note"></textarea>
+                </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="pezziRichiesti">Pezzi Richiesti:</label>
+                  @if (lavorazioneDettaglio.pezziRichiesti && lavorazioneDettaglio.pezziRichiesti.length > 0) {
+                    <p class="testo-normale">{{ lavorazioneDettaglio.pezziRichiesti.map(p => p.nome + ' (Q.tà: ' + p.quantita + ')').join(', ') }}</p>
+                  } @else {
+                    <p class="testo-normale">Nessun pezzo richiesto</p>
+                  }
+                </div>
+
+                <div class="form-group">
+                  <label class="testo-normale" for="tempoTotaleLavoro">Tempo Totale Lavoro:</label>
+                  @if (lavorazioneDettaglio.tempoTotaleLavoro) {
+                    <p class="testo-normale">{{ lavorazioneDettaglio.tempoTotaleLavoro }}</p>
+                  } @else {
+                    <p class="testo-normale">Non ancora registrati</p>
+                  }
+                </div>
+
+                <button class="btn btn-aggiungi" type="submit">Salva</button>
+            </form>
+          </td>
+        </tr>
+      }
+
+
+</div>

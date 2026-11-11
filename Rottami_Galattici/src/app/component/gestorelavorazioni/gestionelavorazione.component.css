@@ -1,0 +1,88 @@
+.doppio-campo {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* Divide il form in due colonne uguali */
+  column-gap: 20px;                      /* Spazio orizzontale tra i campi */
+  row-gap: 10px;                         /* Spazio verticale ridotto */
+  align-items: end;                      /* Allinea i campi in basso se le label hanno altezze diverse */
+  max-width: 500px; /* Impedisce al form (e quindi alla tabella) di allargarsi oltre i 600px */
+  width: 100%;      /* Permette al form di restringersi sui dispositivi più piccoli */
+}
+
+.form-control {
+  font-family: "Chakra Petch", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  width: 100%;       /* Cambiato a 100% per adattarsi alle colonne */
+  max-width: 100%;   /* Impedisce al campo di superare la larghezza della colonna */
+  padding: 5px;      /* Un pizzico di padding per centrare i testi dei select/date */
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.form-group {
+  position: relative;
+  margin-bottom: 5px;
+}
+
+.navicella {
+  grid-column: span 2; 
+  border: 1px solid #b8b8b8;
+  padding: 12px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  
+  /* Attiva la griglia a due colonne anche dentro il box Navicella */
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  column-gap: 25px;
+  row-gap: 8px;
+  box-sizing: border-box; 
+}
+
+.navicella > p.testo-normale {
+  grid-column: span 2;
+  margin-bottom: 5px;
+}
+
+form .btn-aggiungi, 
+form button[type="submit"] {
+  grid-column: span 2; 
+  justify-self: start; /* Allinea il bottone a sinistra senza farlo allargare */
+  margin: 15px 0 0 0;  /* Spazio controllato sopra il bottone */
+}
+
+button.testo-normale {
+  color: #b8b8b8;
+  background-color: #131313;
+  display: block;
+  border: none;
+  cursor: pointer;
+  padding: 10px;
+  gap: 10px;
+}
+
+button.testo-normale::before {
+  content: ">"; 
+}
+
+.testo-lungo {
+  /*Devo far valere come 2 colonne */
+  grid-column: span 2;
+}
+
+
+/* Struttura base del pallino */
+.pallino {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: auto;
+}
+
+/* Classi mappate esattamente sui possibili valori della stringa */
+.pallino.ROUTINE  { background-color: #2ecc71; }   /* Se variabile = 'attivo' */
+.pallino.URGENTE  { background-color: #f1c40f; }   /* Se variabile = 'attesa' */
+.pallino.CODICE_ROSSO { background-color: #e74c3c; } /* Se variabile = 'bloccato' */

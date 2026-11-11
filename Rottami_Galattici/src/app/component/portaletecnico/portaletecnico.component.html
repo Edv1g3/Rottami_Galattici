@@ -1,0 +1,209 @@
+@if (!log) {
+    <div class="container">
+        <h1 class="titolo">Portale Tecnico</h1>
+        <p class="testo-normale">Per accedere alle funzionalità del portale tecnico, effettua il login.</p>
+
+        <form #loginForm="ngForm" (ngSubmit)="login()">
+        <h1 class="titoletti">Login</h1>
+
+        <label class="testo-normale" for="username">Username:</label>
+        <input type="text" id="username" name="username" [(ngModel)]="username" required class="form-control">
+
+        <label class="testo-normale" for="password">Password:</label>
+        <input type="password" id="password" name="password" [(ngModel)]="password" required class="form-control">
+
+        <button type="submit" class="btn btn-primary">Accedi</button>
+        </form>
+        
+    </div>
+} @else {
+    <div class="container">
+        <h1 class="titolo">Portale Tecnico</h1>
+        <p class="testo-normale">Sei loggato come: {{ username }}</p>
+        <p class="testo-normale">Lavorazioni assegnate:</p>
+        <table>
+        <thead>
+            <tr>
+            <th class="titoletti" scope="col">ID</th>
+            <th class="titoletti" scope="col">Stato</th>
+            <th class="titoletti" scope="col">Priorità</th>
+            <th class="titoletti" scope="col">Azioni</th>
+            </tr>
+        </thead>
+        <tbody>
+        @for (lavorazione of lavorazionipersonale; track lavorazione.id) {
+        <tr>
+            <td class="testo-normale">{{ lavorazione.id }}</td>
+            <td class="testo-normale">{{ lavorazione.stato }}</td>
+            <td class="testo-normale"> <span class="pallino" [ngClass]="lavorazione.priorita"></span> </td>
+            <td>
+            <button class="btn btn-modifica" (click)="apriLavorazione(lavorazione)">Apri</button>
+            </td>
+        </tr>
+        }
+        </tbody>
+        </table>
+    </div>
+
+    @if (selectedLavorazione) {
+    <div class="container">
+        <h1 class="testo-normale">Dettaglio Lavorazione</h1>
+        @if (selectedLavorazione.stato === 'IN_DEFINIZIONE' || selectedLavorazione.stato === 'IN_ATTESA' || selectedLavorazione.stato === 'PRONTO' || selectedLavorazione.stato === 'IN_RIPARAZIONE') {
+            @if (selectedLavorazione.stato === 'IN_DEFINIZIONE' || selectedLavorazione.stato === 'IN_ATTESA' || selectedLavorazione.stato === 'PRONTO' ){
+                <p class="testo-normale">La lavorazione è in corso di definizione o in attesa del consenso per la lavorazione.</p>
+                <p class="testo-normale">Non è possibile modificare lo stato della lavorazione in questa fase.</p>
+            }
+            @else {
+                <p class="testo-normale">La lavorazione è in corso di riparazione.</p>
+            }
+
+            <p class="testo-normale">Dati in sola lettura.</p>
+            <div class="dati-lavorazione">
+            @for (proprieta of objectKeys(selectedLavorazione); track proprieta) {
+                <div>
+                    
+                    @if (proprieta === 'navicella') {
+                        <p class="testo-normale inline" style="margin-bottom: 0px;">Navicella: </p>
+                        <div class="dati-navicella">
+                        @for (pro of objectKeys(selectedLavorazione.navicella); track pro) {
+                            <p class="testo-normale inline">{{ pro }}: </p>
+                            <p class="valore">{{ selectedLavorazione.navicella[pro] }}</p>
+                        }
+                        </div>
+                    }
+                    @else if (proprieta === 'pezziRichiesti') {
+                        <div class="testo-normale">
+                        <p class="richiesti">Pezzi Richiesti: </p>
+                        @for (pezzo of selectedLavorazione.pezziRichiesti; track pezzo.nome) {
+                            <div class="pezzo-richiesto">
+                                <p class="testo-normale inline dati-pezzi">Nome: </p>
+                                <p class="valore dati-pezzi">{{ pezzo.nome }}</p>
+                                <p class="testo-normale inline dati-pezzi">Quantità: </p>
+                                <p class="valore dati-pezzi">{{ pezzo.quantita }}</p>
+                            </div>
+                        }
+                        </div>
+                    }
+                    @else if (proprieta !== 'note') {
+                        <p class="testo-normale inline">{{ proprieta }}: </p>
+                        <p class="valore">{{ selectedLavorazione[proprieta] }}</p>
+                    }
+                    
+                </div>
+            }
+            </div>
+
+            @if (selectedLavorazione.stato === 'IN_RIPARAZIONE') {
+                @if (tempoTrascorso !== '') {
+                    <p class="testo-normale">Tempo di lavoro totale: {{ tempoTrascorso }}</p>
+                } @else {
+                    <p class="testo-normale">Il lavoro non è ancora stato iniziato.</p>
+                }
+                @if (!lavorando) {
+                    @if (tempoTrascorso !== '') {
+                        <button class="btn" (click)="start(selectedLavorazione.id)">Riprendi</button>
+                    } @else {
+                        <button class="btn" (click)="start(selectedLavorazione.id)">Inizia Lavoro</button>
+                    }
+                    
+                } @else {
+                    <button class="btn" (click)="reset(selectedLavorazione.id)">Termina Lavoro</button>
+                    <button class="btn" (click)="pause(selectedLavorazione.id)">Pausa</button>
+                }
+            }
+            
+            <form #noteForm="ngForm" (ngSubmit)="aggiornaNote()">
+                <label class="testo-normale">Note:</label>
+                <textarea class="form-control" [(ngModel)]="selectedLavorazione.note" name="note"></textarea>
+                <button type="submit" class="btn btn-primary">Aggiorna Note</button>
+            </form>
+        }
+        @if (selectedLavorazione.stato === 'PERIZIA') {
+            <p class="testo-normale">La lavorazione è in fase di perizia. Bisogna definire il tipo di lavorazione e i pezzi necessari.</p>
+
+            <p class="testo-normale">Dati in sola lettura:</p>
+
+            <div class="dati-lavorazione">
+            @for (proprieta of objectKeys(selectedLavorazione); track proprieta) {
+                <div>
+                    @if (proprieta !== 'navicella' && proprieta !== 'tipoRiparazione' && proprieta !== 'note' && proprieta !== 'pezziRichiesti') {
+                        <p class="testo-normale inline">{{ proprieta }}: </p>
+                        <p class="valore">{{ selectedLavorazione[proprieta] }}</p>
+                    }
+                    @else if (proprieta === 'navicella') {
+                        <p class="testo-normale inline">Navicella: </p>
+                        <div class="dati-navicella">
+                        @for (pro of objectKeys(selectedLavorazione.navicella); track pro) {
+                            <p class="testo-normale inline">{{ pro }}: </p>
+                            <p class="valore">{{ selectedLavorazione.navicella[pro] }}</p>
+                        }
+                        </div>
+                    }
+                </div>
+            }
+            </div>
+
+            <p class="testo-normale">Dati da compilare: </p>
+
+            <form #periziaForm="ngForm" (ngSubmit)="inviaPerizia()">
+                <label class="testo-normale" for="tipoRiparazione">Tipo di Riparazione:</label>
+                <select id="tipoRiparazione" name="tipoRiparazione" [(ngModel)]="selectedLavorazione.tipoRiparazione" required class="form-control">
+                    <option value="" disabled selected>Seleziona un tipo di riparazione</option>
+                    <option value="CHECK_ROUTINE">Check Routine</option>
+                    <option value="SOSTITUZIONE_COMPONENTE">Sostituzione Componente</option>
+                    <option value="RIPARAZIONE_DANNEGGIAMENTO">Riparazione Danno</option>
+                    <option value="RISOLUZIONE_ANOMALIA">Risoluzione Anomalia</option>
+                    <option value="ALTRA">Altro</option>
+                </select>
+
+                <label class="testo-normale" for="note">Note:</label>
+                <textarea id="note" name="note" [(ngModel)]="selectedLavorazione.note" required class="form-control"></textarea>
+
+                <label class="testo-normale">Seleziona Pezzi Richiesti:</label>
+
+                    <div>
+                        @for (pezzo of pezziDisponibili; track pezzo) {
+                            <!-- Creiamo una variabile locale 'rif' al volo per trovare il pezzo nell'array -->
+                            @let rif = getPezzoRiferimento(pezzo.codice);
+
+                            <div>
+                                <!-- Checkbox di Selezione Pezzo -->
+                                <div class="inline">
+                                    <input 
+                                        class=" inline " 
+                                        type="checkbox" 
+                                        [id]="'check-' + pezzo.codice"
+                                        [checked]="rif !== undefined"
+                                        (change)="onPezzoChange(pezzo.codice, $event)">
+                                    <label class="testo-normale inline " for="check-{{ pezzo.codice }}">
+                                        {{ pezzo.codice }} - {{ pezzo.nome }}
+                                    </label>
+                                </div>
+
+                                <!-- Input numerico per la Quantità legato direttamente a 'rif' -->
+                                @if (rif !== undefined) {
+                                    <div class="inline d-flex ">
+                                        <label [for]="'qty-' + pezzo" class="testo-normale piccolo">Q.tà:</label>
+                                        <input 
+                                            type="number" 
+                                            [id]="'qty-' + pezzo"
+                                            class="inline form-control" 
+                                            min="1"
+                                            [(ngModel)]="rif.quantita"
+                                            name="quantita-{{pezzo}}"
+                                            required>
+                                    </div>
+                                }
+                            </div>
+                        }
+                    </div>
+
+
+
+
+                <button type="submit" class="btn btn-primary">Invia Perizia</button>
+            </form>
+        }
+    </div>
+    }
+}

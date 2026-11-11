@@ -1,0 +1,89 @@
+
+.testo-normale{
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.inline {
+  display: inline-block;
+  margin-left: 5px;
+}
+
+.container {
+  padding-right: 0px;
+  float: left;
+  width: 40vw;
+  min-width: 600px;
+}
+
+.form-control {
+  font-family: "Chakra Petch", sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+  width: 100%;       /* Cambiato a 100% per adattarsi alle colonne */
+  max-width: 100%;   /* Impedisce al campo di superare la larghezza della colonna */
+  padding: 5px;      /* Un pizzico di padding per centrare i testi dei select/date */
+  border-radius: 4px;
+  box-sizing: border-box;
+  margin-bottom: 20px;
+}
+
+.valore {
+  margin-left: 5px;
+  border: 1px solid #b8b8b8;
+  border-radius: 5px;
+  color: #b8b8b8;
+  display: inline-block;
+  padding: 5px;
+  min-width: 150px; /* Imposta una larghezza minima per i valori */
+}
+
+.dati-lavorazione {
+  border: 1px solid #b8b8b8;
+  border-radius: 5px;
+}
+
+.dati-navicella {
+  border: 1px solid #b8b8b8;
+  padding: 10px;
+  margin: 5px;
+  border-radius: 5px;
+  max-width: 100%; /* Impedisce al contenitore di superare la larghezza della colonna */
+}
+
+.richiesti{
+  padding-bottom: 0px;
+  margin-bottom: 0px;
+  padding-left: 5px;
+}
+
+.piccolo {
+  font-size: 0.8rem; /* Riduce la dimensione del font */
+  color: #b8b8b8;    /* Colore grigio chiaro */
+  margin-left: 5px;  /* Piccolo margine a sinistra */
+}
+
+.dati-pezzi{
+  padding-left : 5px;
+  margin:0px;
+}
+
+.pezzo-richiesto {
+  margin: 5px;
+}
+
+
+/* Struttura base del pallino */
+.pallino {
+  display: block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin: auto;
+}
+
+/* Classi mappate esattamente sui possibili valori della stringa */
+.pallino.ROUTINE  { background-color: #2ecc71; }   /* Se variabile = 'attivo' */
+.pallino.URGENTE  { background-color: #f1c40f; }   /* Se variabile = 'attesa' */
+.pallino.CODICE_ROSSO { background-color: #e74c3c; } /* Se variabile = 'bloccato' */
